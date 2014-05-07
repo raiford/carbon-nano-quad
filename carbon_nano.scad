@@ -90,9 +90,9 @@ module arm_with_slot(angle, length, width) {
     translate([length, 0, 0])
       square([spacer_w/2, thickness], center=true);
     // Reliefs for inside corners.
-    translate([length - spacer_w/2, thickness/2, 0])
+    translate([length - spacer_w/2 + relief_d/2, (thickness/2), 0])
       relief();
-    translate([length - spacer_w/2, -thickness/2, 0])
+    translate([length - spacer_w/2 + relief_d/2, -(thickness/2), 0])
       relief();
   }
 }
@@ -174,7 +174,7 @@ module body_with_holes() {
 }
 
 module relief() {
-  circle(r=relief_d/2, center=true);
+  circle(r=relief_d/2, center=true, $fn=20);
 }
 
 module body() {
@@ -197,16 +197,16 @@ module foot() {
       }
     }
     // Relief between foot and spacer.
-    translate([spacer_w/2, -(spacer_l/2 - thickness)])
+    translate([spacer_w/2 + relief_d/4, -(spacer_l/2 - thickness - relief_d/4)])
       relief();
     // The two slots to hold the frame layers.
     for(x = [1, -1])
       translate([-(spacer_w/4), x*(layer_spacing/2 + thickness/2)]) {
         square([spacer_w/2, thickness], center=true);
         // Two relief circles
-        translate([spacer_w/4, thickness/2])
+        translate([spacer_w/4 - relief_d/2, (thickness/2)])
           relief();
-        translate([spacer_w/4, -thickness/2])
+        translate([spacer_w/4 - relief_d/2, -(thickness/2)])
           relief();
       }
   }
