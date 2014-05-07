@@ -7,7 +7,7 @@ use <fillets.scad>
 thickness = 1;
 
 // Diameter of reliefs for inside corners.
-relief_d = 0.52;
+relief_d = 1;
 
 // Center Body dimensions
 body_width = 30;
@@ -44,7 +44,7 @@ body_hole_r = 1.5;
 // Foot and layer spacing related parameters.
 layer_spacing = 9;
 spacer_w = 5;
-spacer_l = layer_spacing + 4*thickness;
+spacer_l = layer_spacing + 5;
 foot_l = 14;
 foot_w = spacer_w + motor_d;
 foot_tip = 2; // The width of the foot tips
