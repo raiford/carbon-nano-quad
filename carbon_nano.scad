@@ -3,7 +3,11 @@
 
 use <fillets.scad>
 
-thickness = 1; // Thickness of the body carbon fiber.
+// Thickness of the carbon fiber sheet.
+thickness = 1;
+
+// Diameter of reliefs for inside corners.
+relief_d = 0.52;
 
 // Center Body dimensions
 body_width = 30;
@@ -78,7 +82,6 @@ module arm_with_hole(angle, length, width) {
 }
 
 module arm_with_slot(angle, length, width) {
-  hole_r = screw_dia/2;
   difference() {
     arm(angle, length, width);
     translate([length - spacer_w/4, 0, 0])
@@ -86,6 +89,11 @@ module arm_with_slot(angle, length, width) {
     // Second square is necessary to get clean cut on circle.
     translate([length, 0, 0])
       square([spacer_w/2, thickness], center=true);
+    // Reliefs for inside corners.
+    translate([length - spacer_w/2, thickness/2, 0])
+      relief();
+    translate([length - spacer_w/2, -thickness/2, 0])
+      relief();
   }
 }
 
@@ -165,6 +173,10 @@ module body_with_holes() {
   }
 }
 
+module relief() {
+  circle(r=relief_d/2, center=true);
+}
+
 module body() {
   arms();
   center_body();
@@ -173,18 +185,30 @@ module body() {
 module foot() {
   // The spacer between the sheets.
   difference() {
-    square([spacer_w, spacer_l], center=true);
-    for(x = [1, -1])
-      translate([-(spacer_w/4), x*(layer_spacing/2 + thickness/2)])
-        square([spacer_w/2, thickness], center=true);
-  }
-  // The foot.
-  translate([foot_w/2-spacer_w/2, -(spacer_l/2 + foot_l/2 - thickness)]) {
-    difference() {
-        square([foot_w, foot_l], center=true);
-        translate([foot_tip + foot_w/2, -(foot_tip + foot_l/2)])
-          rounded_square([foot_w*2, foot_l*2], corner_r=4);
+    union() {
+      square([spacer_w, spacer_l], center=true);
+      // The foot.
+      translate([foot_w/2-spacer_w/2, -(spacer_l/2 + foot_l/2 - thickness)]) {
+        difference() {
+            square([foot_w, foot_l], center=true);
+            translate([foot_tip + foot_w/2, -(foot_tip + foot_l/2)])
+              rounded_square([foot_w*2, foot_l*2], corner_r=4);
+        }
+      }
     }
+    // Relief between foot and spacer.
+    translate([spacer_w/2, -(spacer_l/2 - thickness)])
+      relief();
+    // The two slots to hold the frame layers.
+    for(x = [1, -1])
+      translate([-(spacer_w/4), x*(layer_spacing/2 + thickness/2)]) {
+        square([spacer_w/2, thickness], center=true);
+        // Two relief circles
+        translate([spacer_w/4, thickness/2])
+          relief();
+        translate([spacer_w/4, -thickness/2])
+          relief();
+      }
   }
 }
 
