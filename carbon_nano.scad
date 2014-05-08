@@ -44,7 +44,8 @@ body_hole_r = 1.5;
 // Foot and layer spacing related parameters.
 layer_spacing = 9;
 spacer_w = 5;
-spacer_l = layer_spacing + 5;
+spacer_l = layer_spacing + thickness*2;
+spacer_extra_top = 3;
 foot_l = 14;
 foot_w = spacer_w + motor_d;
 foot_tip = 2; // The width of the foot tips
@@ -187,8 +188,10 @@ module foot() {
   difference() {
     union() {
       square([spacer_w, spacer_l], center=true);
+      translate([0, spacer_l/2 + spacer_extra_top/2])
+        square([spacer_w, spacer_extra_top], center=true);
       // The foot.
-      translate([foot_w/2-spacer_w/2, -(spacer_l/2 + foot_l/2 - thickness)]) {
+      translate([foot_w/2-spacer_w/2, -(spacer_l/2 + foot_l/2 )]) {
         difference() {
             square([foot_w, foot_l], center=true);
             translate([foot_tip + foot_w/2, -(foot_tip + foot_l/2)])
@@ -197,7 +200,7 @@ module foot() {
       }
     }
     // Relief between foot and spacer.
-    translate([spacer_w/2 + relief_d/4, -(spacer_l/2 - thickness - relief_d/4)])
+    translate([spacer_w/2 + relief_d/4, -(spacer_l/2 - relief_d/4)])
       relief();
     // The two slots to hold the frame layers.
     for(x = [1, -1])
