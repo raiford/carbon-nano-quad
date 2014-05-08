@@ -216,9 +216,9 @@ $fn=50;
 //for(rot = [0:90:270])
 //  rotate([0, 0, rot]) translate([body_width/2 + 10, 5]) foot();
 
-linear_extrude(height=2) {
+linear_extrude(height=thickness + 1) {
   body_with_holes(); 
   for(rot = [0:90:270])
-    rotate([0, 0, rot]) translate([body_width/2 + 10, 5]) foot();
+    rotate([0, 0, rot]) translate([body_width/2 + 14, 5]) foot();
 }
 
