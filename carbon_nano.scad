@@ -13,10 +13,6 @@ relief_d = 1;
 body_width = 30;
 body_length = 30;
 
-//Thickness of the flat vertical supports.
-vert_thick = 1.5;
-arm_vert_width = 5;
-
 screw_dia = 3;
 screw_inset = 1.4;
 
