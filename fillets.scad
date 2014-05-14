@@ -61,7 +61,7 @@ module fil_linear_o(l, r, angle=90) {
 }
 
 // 3d linear inside fillet.
-module fil_linear_i(l, r, overlap=0 angle=90) {
+module fil_linear_i(l, r, overlap=0, angle=90) {
   translate([0, 0, -l/2]) {
     linear_extrude(height=l, center=false) {
       fil_2d_i(r=r, overlap=overlap, angle=angle);
