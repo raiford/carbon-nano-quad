@@ -7,7 +7,7 @@ use <fillets.scad>
 thickness = 1;
 
 // Diameter of reliefs for inside corners.
-relief_d = 1;
+relief_d = 0.0315 * 25.4 + 0.1;
 
 // Center Body dimensions
 body_width = 30;
@@ -17,7 +17,7 @@ screw_dia = 3;
 screw_inset = 1.4;
 
 // Motor mount parameters.
-motor_d = 7;
+motor_d = 7 - 0.1;
 motor_mount_d = motor_d + 2.5;
 motor_fillet_angle = 55; 
 // Arm Dimensions
