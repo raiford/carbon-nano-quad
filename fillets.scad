@@ -43,10 +43,10 @@ module fil_polar_o(R, r, angle=90) {
 }
 
 // 3d polar inside fillet.
-module fil_polar_i(R, r, angle=90) {
+module fil_polar_i(R, r, overlap=0, angle=90) {
   rotate_extrude(convexity=10) {
     translate([R, 0, 0]) {
-      fil_2d_i(r, angle);
+      fil_2d_i(r=r, overlap=overlap, angle=angle);
     }
   }
 }
@@ -61,10 +61,10 @@ module fil_linear_o(l, r, angle=90) {
 }
 
 // 3d linear inside fillet.
-module fil_linear_i(l, r, angle=90) {
+module fil_linear_i(l, r, overlap=0 angle=90) {
   translate([0, 0, -l/2]) {
     linear_extrude(height=l, center=false) {
-      fil_2d_i(r, angle);
+      fil_2d_i(r=r, overlap=overlap, angle=angle);
     }
   }
 }
