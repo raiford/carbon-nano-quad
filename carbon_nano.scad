@@ -39,7 +39,7 @@ body_hole_r = 1.5;
 
 // Foot and layer spacing related parameters.
 layer_spacing = 9;
-spacer_w = 5;
+spacer_w = 6;
 spacer_l = layer_spacing + thickness*2;
 spacer_extra_top = 3;
 foot_l = 14;
@@ -82,15 +82,11 @@ module arm_with_slot(angle, length, width) {
   difference() {
     arm(angle, length, width);
     translate([length - spacer_w/4, 0, 0])
-      square([spacer_w/2, thickness], center=true);
+      rotate([0, 0, 180])
+      slot();
     // Second square is necessary to get clean cut on circle.
     translate([length, 0, 0])
       square([spacer_w/2, thickness], center=true);
-    // Reliefs for inside corners.
-    translate([length - spacer_w/2 + relief_d/2, (thickness/2), 0])
-      relief();
-    translate([length - spacer_w/2 + relief_d/2, -(thickness/2), 0])
-      relief();
   }
 }
 
@@ -174,6 +170,15 @@ module relief() {
   circle(r=relief_d/2, center=true, $fn=20);
 }
 
+module slot() {
+  square([spacer_w/2, thickness], center=true);
+  // Two relief circles
+  translate([spacer_w/4 + relief_d/6, (thickness/2 + relief_d/4)])
+    relief();
+  translate([spacer_w/4 + relief_d/6, -(thickness/2 + relief_d/4)])
+    relief();
+}
+
 module body() {
   arms();
   center_body();
@@ -201,12 +206,7 @@ module foot() {
     // The two slots to hold the frame layers.
     for(x = [1, -1])
       translate([-(spacer_w/4), x*(layer_spacing/2 + thickness/2)]) {
-        square([spacer_w/2, thickness], center=true);
-        // Two relief circles
-        translate([spacer_w/4 - relief_d/2, (thickness/2)])
-          relief();
-        translate([spacer_w/4 - relief_d/2, -(thickness/2)])
-          relief();
+        slot();
       }
   }
 }
@@ -219,6 +219,5 @@ $fn=50;
 linear_extrude(height=thickness + 1) {
   body_with_holes(); 
   for(rot = [0:90:270])
-    rotate([0, 0, rot]) translate([body_width/2 + 14, 5]) foot();
+    rotate([0, 0, rot]) translate([body_width/2 + 12, 5]) foot();
 }
-
