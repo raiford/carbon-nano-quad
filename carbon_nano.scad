@@ -7,7 +7,10 @@ use <fillets.scad>
 thickness = 1;
 
 // Diameter of reliefs for inside corners.
-relief_d = 0.0315 * 25.4 + 0.1;
+small_endmill = 0.0236 * 25.4;
+large_endmill = 0.0315 * 25.4;
+small_relief = small_endmill + 0.05;
+large_relief = large_endmill + 0.05;
 
 // Center Body dimensions
 body_width = 30;
@@ -21,10 +24,10 @@ motor_d = 7 - 0.1;
 motor_mount_d = motor_d + 2.5;
 motor_fillet_angle = 55; 
 // Arm Dimensions
-front_arm_w = 3;
-front_arm_l = 24;
-rear_arm_w = 3;
-rear_arm_l = 24;
+front_arm_w = 3.5;
+front_arm_l = 26;
+rear_arm_w = 3.5;
+rear_arm_l = 26;
 // Angle between arms.
 front_arm_angle = 90;
 rear_arm_angle = 90;
@@ -39,7 +42,7 @@ body_hole_r = 1.5;
 
 // Foot and layer spacing related parameters.
 layer_spacing = 9;
-spacer_w = 6;
+spacer_w = 7;
 spacer_l = layer_spacing + thickness*2;
 spacer_extra_top = 3;
 foot_l = 14;
@@ -166,17 +169,21 @@ module body_with_holes() {
   }
 }
 
-module relief() {
-  circle(r=relief_d/2, center=true, $fn=20);
+module large_relief() {
+  circle(r=large_relief/2, center=true, $fn=20);
+}
+
+module small_relief() {
+  circle(r=small_relief/2, center=true, $fn=20);
 }
 
 module slot() {
   square([spacer_w/2, thickness], center=true);
   // Two relief circles
-  translate([spacer_w/4 + relief_d/6, (thickness/2 + relief_d/4)])
-    relief();
-  translate([spacer_w/4 + relief_d/6, -(thickness/2 + relief_d/4)])
-    relief();
+  for( x = [1, -1]) {
+    translate([spacer_w/4 - small_relief/2, x * (thickness/2)])
+      small_relief();
+  }
 }
 
 module body() {
@@ -201,8 +208,8 @@ module foot() {
       }
     }
     // Relief between foot and spacer.
-    translate([spacer_w/2 + relief_d/4, -(spacer_l/2 - relief_d/4)])
-      relief();
+    translate([spacer_w/2 + large_relief/4, -(spacer_l/2 - large_relief/4)])
+      large_relief();
     // The two slots to hold the frame layers.
     for(x = [1, -1])
       translate([-(spacer_w/4), x*(layer_spacing/2 + thickness/2)]) {
